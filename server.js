@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 const user = require('./api/users/user');
 //create an express application
 const app = express();
-//use applications
 
 //use bodyParser middleware to parse json string from body.
 app.use(bodyParser.json());
