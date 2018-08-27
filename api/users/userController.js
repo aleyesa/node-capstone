@@ -64,8 +64,14 @@ const createUser = (req, res) => {
 };
 
 const updateUser = (req, res) => {
-  User.findByIdAndUpdate(req.params.id)
-  .then()
+  User.findByIdAndUpdate(req.params.id, {
+    firstName: req.body.firsName,
+    lastName: req.body.lastName,
+    username: req.body.username,
+    password: req.body.password,
+    email: req.body.email
+  })
+  .then(res.json('user updated.'))
 };
 
 const deleteUser = (req, res) => {
