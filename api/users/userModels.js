@@ -10,7 +10,7 @@ const userSchema = new Schema({
   email: String
 });
 
-userSchema.methods.listUserInfo = () => {
+userSchema.methods.listUserInfo = function() {
   return {
     firstName: this.firstName,
     lastName: this.lastName,
