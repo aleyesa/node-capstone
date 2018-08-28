@@ -8,7 +8,7 @@ const userRouter = express.Router();
 //route to get a list of all users
 userRouter.get('/users', (req, res) => {
   userController.getAllUsers(req, res);
-})
+});
 
 userRouter.post('/user/createUser', (req, res) => {
   userController.createUser(req, res);
