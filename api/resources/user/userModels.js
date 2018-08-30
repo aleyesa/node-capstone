@@ -1,5 +1,8 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+// import mongoose from 'mongoose';
+import {
+  Schema,
+  newModel
+} from '../../../mongoose/mongoose';
 
 //User schema that looks for username, password, email
 const userSchema = new Schema({
@@ -20,8 +23,6 @@ userSchema.methods.listUserInfo = function() {
 };
 
 //creates a model of userSchema
-const User = mongoose.model('User', userSchema);
+const User = newModel('User', userSchema);
 
-
-
-module.exports = { User };
+export default User;

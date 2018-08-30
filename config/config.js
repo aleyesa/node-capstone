@@ -1,3 +1,3 @@
 const TEST_DATABASE = 'mongodb://localhost/api-user-test';
 
-module.exports = TEST_DATABASE;
+export default TEST_DATABASE;

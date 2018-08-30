@@ -1,19 +1,8 @@
 //import
-const mongoose = require('mongoose');
-const TEST_DATABASE = require('../../resources/config');
-const { User } = require('./userModels');
+import connectToDatabase from '../../../mongoose/mongoose';
+import User from './userModels';
 
-//connects to database.
-mongoose.connect(TEST_DATABASE, (err) => {
-  console.log(err);
-});
-
-//checks if database connection was successful or not?
-mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
-mongoose.connection.once('open', function() {
-  // we're connected!
-  console.log('Testing database connected.');
-});
+connectToDatabase();
 
 //used for get request to get all users and some of the users account info.
 const getAllUsers = (req, res) => {
@@ -24,6 +13,7 @@ const getAllUsers = (req, res) => {
       return {
         _id: accountInfo._id,
         firstName: accountInfo.firstName,
+        firstName1: accountInfo.firstName1,
         lastName: accountInfo.lastName,
         username: accountInfo.username,
         email: accountInfo.email
@@ -50,19 +40,8 @@ const getUser = (req, res) => {
 
 //used for post request to create a user account.
 const createUser = (req, res) => {
+  
   //check if required fields are listed
-  // const requiredFields = ['firstName', 'lastName', 'username', 'password', 'email'];
-  // for(let keys in req.body){
-  //   requiredFields.forEach(reqKey => {
-  //   if(keys === reqKey) {
-  //     res.json()
-  //     console.log(true);
-  //   }
-  //   else {
-  //     console.log(false);
-  //   }
-  // })
-
   User.create({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -73,28 +52,19 @@ const createUser = (req, res) => {
   .then(user =>
     res.json({username: user.username})
   )
-  .catch(res.json('Could not create account due to improper inputs.'));
+  .catch(err => res.json(err));
 };
-
 //Used for put request to update a users account info.
 const updateUser = (req, res) => {
-  User.findByIdAndUpdate(req.params.id, {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    username: req.body.username,
-    password: req.body.password,
-    email: req.body.email
+  const updatableFields = ['firstName', 'lastName', 'username', 'password', 'email'];
+  //check if req body has unspecified keys
+  User.findByIdAndUpdate(req.params.id, req.body, function(err, user) {
+    if (err) {
+      return res.json(err);
+    } else {
+      res.json(user);
+    }
   })
-  .then(res.json({
-  firstName: req.body.firstName,
-  lastName: req.body.lastName,
-  username: req.body.username,
-  password: req.body.password,
-  email: req.body.email
-}))
-  .catch(err => {
-    res.json('Could not update user, due to missing or improper inputs.')
-  });
 };
 
 //Used for delete request to delete a specified user by username and password.
@@ -107,4 +77,10 @@ const deleteUser = (req, res) => {
   });
 };
 
-module.exports = { getAllUsers, getUser, createUser, updateUser, deleteUser };
+export { 
+  getAllUsers,
+  getUser, 
+  createUser, 
+  updateUser, 
+  deleteUser 
+};
