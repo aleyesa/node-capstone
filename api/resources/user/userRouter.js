@@ -2,7 +2,7 @@ import express from 'express';
 
 import { 
   getAllUsers,
-  getUser, 
+  getUser,                  
   createUser, 
   updateUser, 
   deleteUser 
@@ -12,15 +12,13 @@ import {
 const userRouter = express.Router();
 
 //route to get a list of all users
-userRouter.get('/users', getAllUsers);
-
-userRouter.post('/user/createUser', createUser);
+userRouter.get('/user', getAllUsers);
+userRouter.post('/user', createUser);
 
 //main route for requests in regards to users by id
 userRouter.route('/user/:id')
 .get(getUser)
-.put(updateUser);
-
-userRouter.delete('/user/deleteAccount', deleteUser);
+.put(updateUser)
+.delete(deleteUser);
 
 export default userRouter;
