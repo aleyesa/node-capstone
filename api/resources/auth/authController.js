@@ -21,10 +21,20 @@ const registerUser = (req, res) => {
 };
 
 const loginUser = (req, res) => {
-  User.find( { username: req.body.username } )
+  User.findOne( { username: req.body.username } )
   .then(user => {
     // user.comparePw(req.body.password, user.password)
-    res.json(user.comparePw(req.body.password, user.password));
+    user.comparePw(req.body.password, user.password)
+    .then(user => {
+      if(user) {
+        console.log('Login was successful.');
+        res.status(202).json('Login was successful');
+
+      }else {
+        console.log('Login was not successful, invalid password.');
+        res.status(401).json('Invalid password.');
+      }
+    });
   })
   // .then(result => console.log(result));
   // .catch(res.json('login was not successful.'));
