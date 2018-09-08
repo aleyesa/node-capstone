@@ -4,8 +4,6 @@ import bcrypt from 'bcryptjs';
 mongoose.Promise = global.Promise;
 
 const Schema = mongoose.Schema;
-//emailregex.com
-const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 //User schema that looks for username, password, email
 const userSchema = new Schema({
