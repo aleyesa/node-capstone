@@ -1,4 +1,17 @@
 import User from '../user/userModels';
+import jwt from 'jsonwebtoken';
+import {  
+  JWT_SECRET,
+  JWT_EXPIRY
+} from '../../../config/config';
+
+const createAuthToken = (user) => {
+  return jwt.sign({user}, JWT_SECRET, {
+    subject: user.username,
+    expiresIn: JWT_EXPIRY,
+    algorithm: 'HS256'
+  });
+};
 
 //request to register a new user, with a given username and password
 const registerUser = (req, res) => {
@@ -8,8 +21,9 @@ const registerUser = (req, res) => {
   if(!missingField) {
     if(typeof req.body.username === 'string' &&
     typeof req.body.password === 'string'){
+      
       req.body.username = req.body.username.trim();
-
+  
       User.find({ username: req.body.username })
       .then(user => {
         if(!user) {
@@ -18,13 +32,17 @@ const registerUser = (req, res) => {
           if(req.body.password !== req.body.password.trim()){
             console.log('no spaces allowed in the beginning or end of password.');
           }else {
-            User.hashPassword(req.body.password)
-            .then(pw => {
-              req.body.password = pw;
-              User.create(req.body)
-              .then(user => res.status(201).json(`${user.username} has been created.`))
-            })
-            .catch(err => console.log(`failed to create user. \n ${err.message} `));
+            if(req.body.password.length < 8){
+              console.log('Password needs to be at least 8 characters long.');
+            }else { 
+              User.hashPassword(req.body.password)
+              .then(pw => {
+                req.body.password = pw;
+                User.create(req.body)
+                .then(user => res.status(201).json(`${user.username} has been created.`))
+              })
+              .catch(err => console.log(`failed to create user. \n ${err.message} `));
+            }
           }
         }
       })
@@ -42,8 +60,9 @@ const loginUser = (req, res) => {
     user.comparePw(req.body.password, user.password)
     .then(user => {
       if(user) {
+        const authToken = createAuthToken(req.body);
         console.log('Login was successful.');
-        res.status(202).json(`${req.body.username} logged in successfully.`);
+        res.status(202).json({authToken});
       }else {
         console.log('Login was not successful, invalid password.');
         res.status(401).json('Invalid password.');

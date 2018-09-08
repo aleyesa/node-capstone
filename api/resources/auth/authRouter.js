@@ -1,8 +1,11 @@
 import express from 'express';
+import passport from 'passport';
+
 import { 
   registerUser,
   loginUser 
 } from './authController';
+
 
 const authRouter = express.Router();
 
@@ -13,6 +16,7 @@ authRouter.post('/users/', (req, res) => {
 
 // POST /api/auth/login to request a JWT/ A valid username and password are required , and a new token is given in exchange.
 authRouter.post('/auth/login', (req, res) => {
+  passport.authenticate('local', {session: false}),
   loginUser(req, res);
 });
 

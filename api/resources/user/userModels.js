@@ -10,11 +10,14 @@ const userSchema = new Schema({
   username: { 
     type: String,
     required: 'Username is required.',
+    minlength: 1,
     unique: true
   },
   password: { 
     type: String, 
     required: 'Password is required.', 
+    minlength: 8,
+    maxlength: 72,
     trim: true 
   }
 });
