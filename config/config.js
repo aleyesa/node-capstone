@@ -1,4 +1,6 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
+
 const TEST_DATABASE = 'mongodb://localhost/api-user-test';
 // exports.DATABASE_URL =
 //     process.env.DATABASE_URL ||

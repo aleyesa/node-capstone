@@ -1,6 +1,9 @@
 import User from '../user/userModels';
 import LocalStrategy  from 'passport-local';
-// import { JwtStrategy, Extract-Jwt } from 'passport-jwt';
+import  JwtStrategy from 'passport-jwt';
+import { JWT_SECRET } from '../../../config/config';
+
+const { Strategy, ExtractJwt } = JwtStrategy;
 
 // const localStrategy = new LocalStrategy((username, password, callbackfn) => {
 //   User.findOne( { username: username } )
@@ -21,3 +24,16 @@ import LocalStrategy  from 'passport-local';
 // export default {
 //   localStrategy
 // };
+const jwtStrategy = new Strategy({
+  secretOrKey: JWT_SECRET,
+  jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
+  algorithms: ['HS256']
+},
+(payload, done) => {
+  done(null, payload.user);
+}
+);
+
+export default { 
+  jwtStrategy
+};

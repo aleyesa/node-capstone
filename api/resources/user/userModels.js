@@ -31,6 +31,12 @@ userSchema.methods.comparePw = function(pw, pwHash) {
   return bcrypt.compare(pw, pwHash);
 };
 
+userSchema.methods.serialize = function(user) {
+  return {
+    username: user.username
+  } 
+};
+
 userSchema.statics.hashPassword = function(password) {
   return bcrypt.hash(password, 10);
 };

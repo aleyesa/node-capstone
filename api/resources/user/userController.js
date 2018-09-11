@@ -16,10 +16,8 @@ const getUser = (req, res) => {
   User
   .findById(req.params.id)
   .then(user => {
-    // validate user password
-    return user.comparePw('12345', user.password);
+    res.json(user);
   })
-  .then(val => console.log(val))
   .catch(err => {
     res.json(`${err}, user id not found.`)
     console.log(`${err}, user id not found.`)

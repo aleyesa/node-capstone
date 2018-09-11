@@ -54,13 +54,14 @@ const registerUser = (req, res) => {
   }
 };
 
+//request a JWT/ A valid username and password are required , and a new token is given in exchange.
 const loginUser = (req, res) => {
   User.findOne( { username: req.body.username } )
   .then(user => {
     user.comparePw(req.body.password, user.password)
     .then(user => {
       if(user) {
-        const authToken = createAuthToken(req.body);
+        const authToken = createAuthToken({username: req.body.username});
         console.log('Login was successful.');
         res.status(202).json({authToken});
       }else {
@@ -72,11 +73,15 @@ const loginUser = (req, res) => {
   .catch(err => res.status(400).json(`Invalid username, \n error message: ${err.message}`));
 };
 
-//request a JWT/ A valid username and password are required , and a new token is given in exchange.
-
 //request for a protected API endpoint. A valid, non-expired JWT is required. You use the same JWT to make as many requests as you like until it expires.
+const checkJwt = (req, res) => {
 
+};
 //request a new JWT with a laster expiry date. A valid, non-expired JWT is required.
+const newJWT = (req, res) => {
+  const newJWT = createAuthToken(req.body.authToken)
+};
+
 
 export {
   registerUser,
