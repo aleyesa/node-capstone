@@ -1,13 +1,15 @@
 import express from 'express';
 import passport from 'passport';
-import jwtStrategy from './strategies';
+import strategies from './strategies';
 
 import { 
   registerUser,
-  loginUser 
+  validateLogin,
+  newJWT
 } from './authController';
 
-// passport.use(jwtStrategy);
+strategies(passport);
+
 const authRouter = express.Router();
 
 // POST /api/users/ to request to register a new user, with a given username and password
@@ -19,22 +21,17 @@ authRouter.post('/users/', (req, res) => {
 authRouter.post('/auth/login', 
   passport.authenticate('local', {session: false}), 
   (req, res) => {
-
-   loginUser(req, res);
-
+    validateLogin(req, res);
 });
 
-passport.use(jwtStrategy.jwtStrategy);
 // GET /api/protected to make a request for a protected API endpoint. A valid, non-expired JWT is required. You use the same JWT to make as many requests as you like until it expires.
 authRouter.get('/protected', passport.authenticate('jwt', {session: false}), (req, res) => {
-   return res.json({
-     data: 'works'
-   });
+   return res.json('logged in');
 });
 
 // POST /api/auth/refresh to request a new JWT with a laster expiry date. A valid, non-expired JWT is required.
-// authRouter.post('/auth/refresh', (req, res) => {
-
-// });
+authRouter.post('/auth/refresh', passport.authenticate('jwt', {session: false}), (req, res) => {
+  newJWT(req, res);
+});
 
 export default authRouter;
