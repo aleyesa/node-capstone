@@ -11,15 +11,15 @@ mongoose.connect(TEST_DATABASE, { useNewUrlParser: true }, (err) => {
     console.log('database has been connected.');
   }
 });
-
 //create an express application
 const app = express();  
-
+app.use(express.static('public'));
 appMiddleware(app, express);
 api(app);
 
 //run local host
 app.listen(8080, () => console.log('Application listening to port 8080'));
+
 
 
 

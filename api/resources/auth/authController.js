@@ -17,7 +17,7 @@ const createAuthToken = (user) => {
 const registerUser = (req, res) => {
   const requiredFields = ['username', 'password'];
   const missingField = requiredFields.find(field => !(field in req.body));
-  //check if username and password values are strings
+    //check if username and password values are strings
   if(!missingField) {
     if(typeof req.body.username === 'string' &&
     typeof req.body.password === 'string'){
@@ -54,7 +54,7 @@ const registerUser = (req, res) => {
   }
 };
 
-// // request a JWT/ A valid username and password are required, and a new token is given in exchange.
+//request a JWT/ A valid username and password are required, and a new token is given in exchange.
 const validateLogin = (req, res) => {
         const authToken = createAuthToken({username: req.body.username});
         res.status(202).json({authToken});
