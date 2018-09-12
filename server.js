@@ -1,12 +1,27 @@
-//import express
-const express = require('express');
-//import bodyParser middleware
-const bodyParser = require('body-parser');
+import express from 'express';
+import appMiddleware from './middleware/appMiddlware';
+import api from './api/api';
+import { TEST_DATABASE } from './config/config';
+import mongoose from 'mongoose';
 
-const app = express();
-//use applications
+mongoose.connect(TEST_DATABASE, { useNewUrlParser: true }, (err) => {
+  if(err) {
+  console.log(err);
+  } else {
+    console.log('database has been connected.');
+  }
+});
+
+//create an express application
+const app = express();  
+
+appMiddleware(app, express);
+api(app);
 
 //run local host
 app.listen(8080, () => console.log('Application listening to port 8080'));
+
+
+
 
 
